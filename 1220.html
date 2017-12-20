@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="vue.js"></script>
+    <title>VueJS</title>
+</head>
+<body>
+    <div class="test1">
+            <p :title="message">{{message}}</p>
+            <input v-model="message" type="text" />
+            <button @click="btnClick">reverse</button>
+            <ol v-for="(todo,index) in todos" :key="index">
+                <gaoyin-test  :todo="todo"></gaoyin-test>
+            </ol>
+    </div>
+    
+<script>
+    Vue.component('gaoyin-test',{
+        props:['todo'],
+        template:'<li>{{todo.text}}</li>'
+    })
+    var vm = new Vue({
+        el:'.test1',
+        data:{
+            message:'hello,world',
+            todos:[
+                {text:'test1'},
+                {text:'test2'},
+                {text:'test3'},
+                {text:'test4'},
+            ]
+        },
+        methods:{
+            btnClick(){
+                this.message=this.message.split('').reverse().join('')
+            }
+        }
+    })
+</script>
+</body>
+</html>
