@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="count-item">
+        <count-item  :count.sync="count">
+        </count-item>
+        <br/>
+        <count-item1></count-item1>
+        <count-item1></count-item1>
+        <count-item1></count-item1>
+    </div>
+    <script>
+        let vm = new Vue({
+            el: '.count-item',
+            components: {
+                'countItem': {
+                    props: ['count'],
+                    template: `
+                    <button @click="counter">{{count}}</button>
+                    `,
+                    methods:{
+                        counter(e){
+                            this.$emit('update:count',100)
+                        }
+                    },
+                    data(){
+                        // return {
+                        //     counter: this.count
+                        // }
+                    }
+                },
+                'count-item1': {
+                    template: `
+                    <button @click="count+=1">{{count}}</button>
+                    `,
+                    data() {
+                        return {
+                            count: 0,
+                        }
+                    }
+                },
+            },
+            data: {
+                count: 0,
+            },
+        })
+    </script>
+</body>
+
+</html>

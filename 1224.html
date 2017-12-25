@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="vue.js"></script>
+    <title>Document</title>
+    <style>
+    .comp-fade-enter-active,.comp-fade-leave-active{
+        transition: all .5s ease;
+    }
+    .comp-fade-enter, .comp-fade-leave-to{
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    </style>
+</head>
+<body>
+    <div class="comp">
+        <select name="" id="" v-model="selected">
+            <option v-for="(comps,index) in compList" :value="comps.comp">{{comps.value}}</option>
+        </select>
+        <keep-alive>
+            <transition name="comp-fade" mode="out-in">
+                <component :is="selected" ref="comp"></component>
+            </transition>
+        </keep-alive>
+    </div>
+<script>
+    let vm = new Vue({
+        el:'.comp',
+        components:{
+            'comp1':{
+                template:'<p>comp1 components</p>'
+            },
+            'comp2':{
+                template:'<p>comp2 components</p>'
+            },
+            'comp3':{
+                template:'<p>comp3 components</p>'
+            },
+        },
+        data:{
+            selected: 'comp2',
+            compList:[
+                {comp:'comp1',value:'components 1'},
+                {comp:'comp2',value:'components 2'},
+                {comp:'comp3',value:'components 3'},
+            ]
+        }
+    })
+</script>    
+</body>
+</html>

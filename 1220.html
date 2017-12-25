@@ -5,37 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
     <title>VueJS</title>
 </head>
 <body>
     <div class="test1">
             <p :title="message">{{message}}</p>
-            <input v-model="message" type="text" />
+            <input v-model="question" type="text" />
             <button @click="btnClick">reverse</button>
-            <ol v-for="(todo,index) in todos" :key="index">
-                <gaoyin-test  :todo="todo"></gaoyin-test>
+            <div>
+                <p>{{answer}}</p>
+                <img :src="href" alt="" v-show="href">
+            </div>
+            <ol>
+                <li is="gaoyin-test" v-for="(todo,index) in todos" :key="index" v-bind="todo"></li>
             </ol>
+            <p v-html="html"></p>
+            <p>{{upMsg}}</p>
+            <h5 v-if="question">{{question}}</h5>
+            <h5 v-else>question为空</h5>
     </div>
     
 <script>
     Vue.component('gaoyin-test',{
-        props:['todo'],
-        template:'<li>{{todo.text}}</li>'
+        props:['text'],
+        template:'<li>{{text}}</li>'
     })
     var vm = new Vue({
         el:'.test1',
         data:{
+            html:'<h1>v-html</h1>',
             message:'hello,world',
+            answer: '',
+            href: '',
             todos:[
                 {text:'test1'},
                 {text:'test2'},
                 {text:'test3'},
                 {text:'test4'},
-            ]
+            ],
+            time: new Date(),
+            question:'123',
         },
         methods:{
             btnClick(){
                 this.message=this.message.split('').reverse().join('')
+            },
+            getQuestion:_.debounce(function(){
+                this.answer = 'Thinking'
+                axios.get('https://yesno.wtf/api').then(res=>{
+                    this.answer=res.data.answer
+                    this.href = res.data.image
+                }).catch(res=>{
+                    this.answer=res.message
+                })
+            },500)
+        },
+        computed:{
+            upMsg(){
+                return this.message
+            },
+            upMsg1:{
+                get(){
+                    return this.message
+                },
+                set(val){
+                    this.message = this.message+val
+                }
+            }
+        },
+        watch:{
+            question(){
+                this.getQuestion()
             }
         }
     })
