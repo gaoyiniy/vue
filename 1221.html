@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="todo-item">
+        <input v-model="inputVal" type="text" @keyup.enter.once="addValue" placeholder="add new item" />
+        <ol>
+            <li is="todo-item" v-for="(item,index) in todos" :key="item.id" :todo="item" @remove="test($event,index)">
+            </li>
+        </ol>
+        <input type="text" v-model.trim="testNum">
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '.todo-item',
+            components: {
+                'todo-item': {
+                    props: ['todo'],
+                    template: `
+                        <li>
+                            {{todo.text}}
+                            <button @click="remove">X</button>
+                        </li>
+                    `,
+                    methods:{
+                        remove(e){
+                            this.$emit('remove',e)
+                        }
+                    }
+                }
+            },
+            data: {
+                inputVal: '',
+                testNum: '',
+                todos: [
+                    { text: 'chrome' },
+                    { text: 'ie' },
+                    { text: 'safari' },
+                    { text: 'firefox' },
+                    { text: 'opera' },
+                ]
+            },
+            methods: {
+                addValue() {
+                    this.todos.push({
+                        text: this.inputVal
+                    })
+                    this.inputVal = ''
+                },
+                test(e,index) {
+                    this.todos.splice(index, 1)
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>

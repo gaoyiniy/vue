@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="vue.js"></script>
+    <title>12.23</title>
+</head>
+
+<body>
+    <div class="myapp">
+        type:<input :value="inputVal" @input="inputVal=$event.target.value" type="text" />
+        <show-message :num="inputVal" style="color:red;"></show-message>   
+        <my-checkbox v-model="inputVal" value="test value"></my-checkbox>
+        <hr/>
+        <h1>slot</h1>
+        <slot-comp>
+            <h3 slot="title">这是标题title</h3>
+            <!-- <p>这是内容content</p> -->
+            <p slot="footer">这是footer</p>
+        </slot-comp>
+        <h1>#slot-scope</h1>
+        <slot-scope-comp>
+            <template slot-scope="props">
+                <span>hello from parent</span>
+                <span>{{props.text}}</span>
+            </template>
+        </slot-scope-comp>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '.myapp',
+            components:{
+                'show-message':{
+                    props:{
+                        num:{
+                            type: String,
+                            required:true,
+                            default: 1000,
+                        }
+                    },
+                    template:`
+                        <h5>Number:{{num}}</h5>
+                    `,
+                },
+                'my-checkbox':{
+                    model:{
+                        prop:'checked',
+                        event:'change'
+                    },
+                    props:{
+                        checked:Boolean,
+                        value:String
+                    },
+                    template:'<input type="text" :value="value"/>'
+                },
+                'slot-comp':{
+                    template:`
+                        <div>
+                            <header>
+                                <slot name="title"></slot>
+                            </header>
+                            <main>
+                                <slot></slot>
+                            </main>
+                            <slot>测试单个插槽</slot>
+                            <footer>
+                                <slot name="footer"></slot>
+                            </footer>
+                        </div>
+                    `,
+                },
+                'slot-scope-comp':{
+                    template:'<div><slot text="hello from child"></slot></div>'
+                }
+
+            },
+            data:{
+                inputVal: '',
+            },
+            methods:{
+                inputValue(val,e){
+                    debugger
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

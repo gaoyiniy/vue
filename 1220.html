@@ -19,7 +19,7 @@
                 <img :src="href" alt="" v-show="href">
             </div>
             <ol>
-                <gaoyin-test  v-for="(todo,index) in todos" :key="index" :todo="todo"></gaoyin-test>
+                <li is="gaoyin-test" v-for="(todo,index) in todos" :key="index" v-bind="todo"></li>
             </ol>
             <p v-html="html"></p>
             <p>{{upMsg}}</p>
@@ -29,8 +29,8 @@
     
 <script>
     Vue.component('gaoyin-test',{
-        props:['todo'],
-        template:'<li>{{todo.text}}</li>'
+        props:['text'],
+        template:'<li>{{text}}</li>'
     })
     var vm = new Vue({
         el:'.test1',
