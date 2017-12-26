@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="vue.js"></script>
+    <title>Document</title>
+    <style>
+.bounce-enter-active {
+    animation: bounce-in 1s
+  }
+  @keyframes bounce-in{
+      0%{
+          transform: scale(0);
+      }
+      50%{
+          transform: scale(1.5);
+      }
+      100%{
+          transform: scale(1);
+      }
+  }
+    </style>
+</head>
+<body>
+    <div id="demo">
+        <button @click="show=!show">transition</button>
+        <transition name="bounce">
+            <p v-if="show">hello</p>
+        </transition>
+        <input v-model="inputVal" type="text"  />
+        <input v-model="inputVal" type="text" v-focus/>
+        <render-comp :level="inputVal">
+            <span>span</span>
+        </render-comp>
+        <div>{{message}}</div>
+    </div>
+    <script>
+    let myMixin={
+        created(){
+            this.hello()
+        },
+        methods:{
+            hello(){
+                console.log('hello from mixin')
+            }
+        }
+    }
+
+    let vm = new Vue({
+        components:{
+            'render-comp':{
+                render(createElement){
+                    return createElement(
+                        'h' + this.level,
+                        this.$slots.default
+                    )
+                },
+                props:['level'],
+                methods:{
+                    hello(){
+                        
+                    }
+                }
+            }
+        },
+        directives:{
+            focus:{
+                inserted(el){
+                    el.focus()
+                }
+            }
+        },
+        el:'#demo',
+        // mixins:[myMixin],
+        data:{
+            message: 'hello',
+            show:true,
+            inputVal: '1',
+        },
+        created(){
+            debugger
+            // console.log('hello from parent')
+        },
+        methods:{
+            hello(){
+                console.log('hello from parent')
+            }
+        },
+    })
+    </script>
+</body>
+</html>
